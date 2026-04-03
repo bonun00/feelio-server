@@ -1,0 +1,26 @@
+spring:
+  ai:
+    google:
+      genai:
+        chat:
+          options:
+            model: gemini-2.5-flash
+        api-key: ${GOOGLE_AI_KEY}
+    retry:
+      max-attempts: 1
+
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+springdoc:
+  default-produces-media-type: application/json
+  default-consumes-media-type: application/json
+
+
+server:
+  port: 9090
