@@ -19,10 +19,12 @@ public record DiaryDetailRes(
 		example = "어려운 과제를 해결하며 성장하는 모습이 정말 멋져요.")
 	String comment,
 	@Schema(description = "분석 상태 (PROCESSING: 분석 중, COMPLETED: 완료)", example = "PROCESSING")
-	String status
+	String status,
+
+	boolean userCheck
 ) {
-	public DiaryDetailRes(String content, Object emotion, Integer score, String comment) {
-		this(content, emotion, score, comment, (comment == null) ? "PROCESSING" : "COMPLETED");
+	public DiaryDetailRes(String content, Object emotion, Integer score, String comment,boolean userCheck) {
+		this(content, emotion, score, comment, (comment == null) ? "PROCESSING" : "COMPLETED", userCheck);
 	}
 	public static DiaryDetailRes from(Diary diary, AIAnalysis analysis) {
 		String status = (analysis == null) ? "PROCESSING" : "COMPLETED";
@@ -31,7 +33,8 @@ public record DiaryDetailRes(
 			analysis != null ? analysis.getEmotion() : null,
 			analysis != null ? analysis.getEmotionScore() : null,
 			analysis != null ? analysis.getAiComment() : null,
-			status
+			status,
+			diary.isUserChecked()
 		);
 	}
 }

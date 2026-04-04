@@ -51,6 +51,8 @@ public class Diary {
 	@ColumnTransformer(write = "?::vector")
 	private float[] embedding;
 
+	private boolean userChecked=false;
+
 	@Column(nullable = false, updatable = false)
 	private LocalDateTime createdAt;
 
@@ -60,5 +62,10 @@ public class Diary {
 		this.content = content;
 		this.embedding = embedding;
 		this.createdAt = (localDate != null) ? localDate.atStartOfDay() : LocalDateTime.now();
+	}
+
+
+	public void updateUserCheck(){
+		userChecked = true;
 	}
 }
