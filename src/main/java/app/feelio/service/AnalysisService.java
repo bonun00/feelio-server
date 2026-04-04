@@ -81,7 +81,8 @@ public class AnalysisService {
 			.orElseThrow(() -> new NoSuchElementException("수정할 분석 데이터가 없습니다."));
 
 		analysis.updateResult(req.emotion(), req.score());
-
+		Diary diary=diaryRepository.findById(diaryId).orElseThrow(() -> new NoSuchElementException("수정할 분석 데이터가 없습니다."));
+		diary.updateUserCheck();
 		return new AnalysisUpdateRes(
 			analysis.getEmotion(),
 			analysis.getEmotionScore(),

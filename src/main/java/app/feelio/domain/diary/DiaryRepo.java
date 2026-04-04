@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import app.feelio.domain.analysis.Emotion;
 import app.feelio.dto.diary.DiaryDetailRes;
 
 public interface DiaryRepo extends JpaRepository<Diary, Long> {
@@ -35,7 +36,8 @@ public interface DiaryRepo extends JpaRepository<Diary, Long> {
         d.content, 
         a.emotion, 
         a.emotionScore, 
-        a.aiComment
+        a.aiComment,
+        d.userChecked
     )
     FROM Diary d
     LEFT JOIN AIAnalysis a ON d.id = a.diary.id
