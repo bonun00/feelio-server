@@ -15,7 +15,7 @@ public class WebConfig implements WebMvcConfigurer {
 				"http://116.43.140.221:3000",
 				"https://feelio-frontend-gules.vercel.app"
 			)
-			.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+			.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS","PATCH")
 			.allowedHeaders("*")
 			.allowCredentials(true);
 	}
