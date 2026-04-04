@@ -94,4 +94,10 @@ public class AiAnalysisManager {
 			.score(data.score()).emotion(data.emotion()).comment(data.comment())
 			.isContextUsed(isContextUsed).build();
 	}
+
+
+	@Transactional
+	public String callGemini(String prompt){
+		return chatModel.call(prompt);
+	}
 }

@@ -74,4 +74,37 @@ public interface DiaryRepo extends JpaRepository<Diary, Long> {
 	);
 
 	Optional<Diary> findById(Long id);
+
+
+	// 1. 특정 월의 감정별 개수 통계 조회
+	// 1. Join을 사용하여 AIAnalysis의 emotion 통계 조회
+	@Query("SELECT a.emotion, COUNT(d) FROM Diary d " +
+		"JOIN d.analysis a " +  // Diary와 연결된 AIAnalysis 조인
+		"WHERE d.user.id = :userId " +
+		"AND d.createdAt BETWEEN :start AND :end " +
+		"GROUP BY a.emotion")
+	List<Object[]> countEmotionsByMonth(
+		@Param("userId") Long userId,
+		@Param("start") LocalDateTime start,
+		@Param("end") LocalDateTime end
+	);
+
+	// 2. Native Query 수정 (DB 테이블 구조에 맞춰 diary와 ai_analysis 조인)
+	@Query(value = """
+       SELECT d.created_at FROM diary d
+       JOIN ai_analysis a ON d.id = a.diary_id
+       WHERE d.user_id = :userId
+       AND a.emotion = :emotion
+       AND d.created_at >= :start  -- 시작일 00:00:00 이상
+       AND d.created_at < :end     -- 다음달 1일 00:00:00 미만 (이게 가장 깔끔합니다)
+       ORDER BY d.created_at DESC
+       LIMIT 1
+       """, nativeQuery = true)
+	Optional<LocalDateTime> findTopEmotionDate(
+		@Param("userId") Long userId,
+		@Param("emotion") String emotion,
+		@Param("start") LocalDateTime start,
+		@Param("end") LocalDateTime end
+	);
+
 }

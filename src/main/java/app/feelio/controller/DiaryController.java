@@ -35,7 +35,7 @@ public class DiaryController {
 		@RequestHeader("userId") Long userId,
 		@RequestBody DiaryReq request) {
 
-		DiaryRes result = analysisService.saveDiaryAndTriggerAnalysis(userId, request.content(), request.analysisType());
+		DiaryRes result = analysisService.saveDiaryAndTriggerAnalysis(userId, request.content(), request.date(),request.analysisType());
 		return ResponseEntity.ok(result);
 	}
 

@@ -36,8 +36,8 @@ public class AnalysisService {
 	private final AIAnalysisRepo aiAnalysisRepo;
 
 	@Transactional
-	public DiaryRes saveDiaryAndTriggerAnalysis(Long userId, String content, AnalysisType type) {
-		Diary diary = saveDiary(userId, content);
+	public DiaryRes saveDiaryAndTriggerAnalysis(Long userId, String content,LocalDate date, AnalysisType type) {
+		Diary diary = saveDiary(userId, content,date);
 
 		TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
 			@Override
@@ -51,11 +51,11 @@ public class AnalysisService {
 	}
 
 	@Transactional
-	public Diary saveDiary(Long userId, String content) {
+	public Diary saveDiary(Long userId, String content, LocalDate createdAt) {
 		User user = userRepo.findById(userId)
 			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자 입니다"));
 
-		diaryRepository.findDiaryByDate(userId, LocalDate.now())
+		diaryRepository.findDiaryByDate(userId, createdAt)
 			.ifPresent(d -> {
 				throw new IllegalStateException("오늘 일기를 이미 작성했습니다.");
 			});
@@ -64,7 +64,7 @@ public class AnalysisService {
 		Diary diary = Diary.builder()
 			.user(user)
 			.content(content)
-			.embedding(embedding)
+			.embedding(embedding).localDate(createdAt)
 			.build();
 
 		return diaryRepository.save(diary);
