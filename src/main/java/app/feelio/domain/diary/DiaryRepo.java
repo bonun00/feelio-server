@@ -37,7 +37,8 @@ public interface DiaryRepo extends JpaRepository<Diary, Long> {
         a.emotion, 
         a.emotionScore, 
         a.aiComment,
-        d.userChecked
+        d.userChecked,
+        d.id
     )
     FROM Diary d
     LEFT JOIN AIAnalysis a ON d.id = a.diary.id
