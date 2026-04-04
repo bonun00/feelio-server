@@ -4,27 +4,19 @@ spring:
       genai:
         chat:
           options:
-            model: gemini-3.1-flash-lite-preview
+            model: gemini-2.5-flash
         api-key: ${GOOGLE_AI_KEY}
-        embedding:
-          api-key: ${GOOGLE_AI_KEY}
-          text:
-            options:
-              model: gemini-embedding-2-preview
-              task-type: RETRIEVAL_DOCUMENT
-              dimensions: 768
+    retry:
+      max-attempts: 1
 
   datasource:
     url: ${DB_URL}
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
-    hikari:
-      data-source-properties:
-        prepareThreshold: 0
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
 springdoc:
   default-produces-media-type: application/json
   default-consumes-media-type: application/json
