@@ -21,10 +21,11 @@ public record DiaryDetailRes(
 	@Schema(description = "분석 상태 (PROCESSING: 분석 중, COMPLETED: 완료)", example = "PROCESSING")
 	String status,
 
-	boolean userCheck
+	boolean userCheck,
+	Long diaryId
 ) {
-	public DiaryDetailRes(String content, Object emotion, Integer score, String comment,boolean userCheck) {
-		this(content, emotion, score, comment, (comment == null) ? "PROCESSING" : "COMPLETED", userCheck);
+	public DiaryDetailRes(String content, Object emotion, Integer score, String comment,boolean userCheck,Long diaryId) {
+		this(content, emotion, score, comment, (comment == null) ? "PROCESSING" : "COMPLETED", userCheck,diaryId);
 	}
 	public static DiaryDetailRes from(Diary diary, AIAnalysis analysis) {
 		String status = (analysis == null) ? "PROCESSING" : "COMPLETED";
@@ -34,7 +35,8 @@ public record DiaryDetailRes(
 			analysis != null ? analysis.getEmotionScore() : null,
 			analysis != null ? analysis.getAiComment() : null,
 			status,
-			diary.isUserChecked()
+			diary.isUserChecked(),
+			diary.getId()
 		);
 	}
 }
