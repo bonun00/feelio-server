@@ -3,6 +3,8 @@ package app.feelio.domain.analysis;
 import app.feelio.domain.diary.Diary;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -32,18 +34,26 @@ public class AIAnalysis {
 	private Integer emotionScore;
 
 	@Column(nullable = false, length = 100)
-	private String emotionLabel;
+	@Enumerated(EnumType.STRING)
+	private Emotion emotion;
 
 	@Column(columnDefinition = "TEXT", nullable = false)
 	private String aiComment;
 
 	@Builder
-	public AIAnalysis(Diary diary, Integer emotionScore, String emotionLabel, String aiComment) {
+	public AIAnalysis(Diary diary, Integer emotionScore, Emotion emotion, String aiComment) {
 		this.diary = diary;
 		this.emotionScore = emotionScore;
-		this.emotionLabel = emotionLabel;
+		this.emotion = emotion;
 		this.aiComment = aiComment;
 	}
-
+	public void updateResult(Emotion emotion, Integer score) {
+		if (emotion != null) {
+			this.emotion = emotion;
+		}
+		if (score != null) {
+			this.emotionScore = score;
+		}
+	}
 
 }
