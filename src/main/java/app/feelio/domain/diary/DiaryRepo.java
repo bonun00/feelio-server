@@ -42,7 +42,7 @@ public interface DiaryRepo extends JpaRepository<Diary, Long> {
     WHERE d.user.id = :userId 
       AND CAST(d.createdAt AS date) = CAST(:date AS date)
 """)
-	List<DiaryDetailRes> findDiaryByDate(
+	Optional<DiaryDetailRes> findDiaryByDate(
 		@Param("userId") Long userId,
 		@Param("date") LocalDate date
 	);
@@ -67,9 +67,11 @@ public interface DiaryRepo extends JpaRepository<Diary, Long> {
 		"WHERE d.user.id = :userId " +
 		"AND d.createdAt >= :start " +
 		"AND d.createdAt <= :end")
-	List<Diary> findDiariesByUserIdAndDateRange(
+	Optional<Diary> findDiariesByUserIdAndDateRange(
 		@Param("userId") Long userId,
 		@Param("start") LocalDateTime start,
 		@Param("end") LocalDateTime end
 	);
+
+	Optional<Diary> findById(Long id);
 }

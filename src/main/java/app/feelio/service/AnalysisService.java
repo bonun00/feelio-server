@@ -1,5 +1,6 @@
 package app.feelio.service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import org.springframework.ai.embedding.EmbeddingModel;
@@ -46,13 +47,18 @@ public class AnalysisService {
 		});
 
 
-		return DiaryRes.builder().date(diary.getCreatedAt().toLocalDate()).build();
+		return DiaryRes.builder().diaryId(diary.getId()).date(diary.getCreatedAt().toLocalDate()).build();
 	}
 
 	@Transactional
 	public Diary saveDiary(Long userId, String content) {
 		User user = userRepo.findById(userId)
 			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자 입니다"));
+
+		diaryRepository.findDiaryByDate(userId, LocalDate.now())
+			.ifPresent(d -> {
+				throw new IllegalStateException("오늘 일기를 이미 작성했습니다.");
+			});
 
 		float[] embedding = embeddingModel.embed(content);
 		Diary diary = Diary.builder()

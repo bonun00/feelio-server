@@ -3,6 +3,7 @@ package app.feelio.domain.cheer;
 import java.time.LocalDateTime;
 
 import app.feelio.domain.analysis.Emotion;
+import app.feelio.domain.diary.Diary;
 import app.feelio.domain.user.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -21,18 +22,14 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-public class CheerMessage {
+public class EmpathyMessage {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_id", nullable = false)
-	private User user;
-
-	@Column(nullable = false)
-	@Enumerated(EnumType.STRING)
-	private Emotion emotion;
+	@JoinColumn(name = "diary_id", referencedColumnName = "id", nullable = false)
+	private Diary diary;
 
 	@Column(columnDefinition = "TEXT", nullable = false)
 	private String content;
@@ -42,10 +39,9 @@ public class CheerMessage {
 
 
 	@Builder
-	public CheerMessage(User user, String content ,Emotion emotion) {
-		this.user = user;
+	public EmpathyMessage(Diary diary, String content) {
+		this.diary = diary;
 		this.content = content;
-		this.emotion = emotion;
 	}
 
 

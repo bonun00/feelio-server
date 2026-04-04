@@ -26,15 +26,14 @@ public class DiaryService {
 	private final DiaryRepo diaryRepo;
 	private final AIAnalysisRepo aiAnalysisRepo;
 
-	public List<DiaryDetailRes> getDiaryByDate(Long userId, LocalDate date) {
-		LocalDateTime start = date.atStartOfDay(); // 2026-04-04 00:00:00
-		LocalDateTime end = date.atTime(LocalTime.MAX); // 2026-04-04 23:59:59.999...
+	public DiaryDetailRes getDiaryByDate(Long userId, LocalDate date) {
+		LocalDateTime start = date.atStartOfDay();
+		LocalDateTime end = date.atTime(LocalTime.MAX);
 
-		List<Diary> diaries = diaryRepo.findDiariesByUserIdAndDateRange(userId, start, end);
+		Diary diary = diaryRepo.findDiariesByUserIdAndDateRange(userId, start, end).orElseThrow(
+			()->new IllegalStateException("작성된 일기가 없습니다"));
 
-		return diaries.stream()
-			.map(diary -> DiaryDetailRes.from(diary, diary.getAnalysis()))
-			.toList();
+		return DiaryDetailRes.from(diary, diary.getAnalysis());
 	}
 
 	public CalendarRes getMonthCalendar(Long userId, int year, int month) {
@@ -46,9 +45,13 @@ public class DiaryService {
 			.stream()
 			.collect(Collectors.toMap(CalendarDataProjection::getDate, d -> d, (ex, rep) -> ex));
 
+		boolean isPresent=!diaryMap.isEmpty();
+
 		List<CalendarRes.DayDetail> days = new ArrayList<>();
 		for (LocalDate date = start; !date.isAfter(end); date = date.plusDays(1)) {
 			CalendarDataProjection data = diaryMap.get(date);
+
+
 			days.add(new CalendarRes.DayDetail(
 				date,
 				data != null ? data.getDiaryId() : null,
@@ -56,7 +59,7 @@ public class DiaryService {
 			));
 		}
 
-		return new CalendarRes(year, month, days);
+		return new CalendarRes(year, month, isPresent,days);
 	}
 
 }
