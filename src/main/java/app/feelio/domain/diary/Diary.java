@@ -1,5 +1,6 @@
 package app.feelio.domain.diary;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import org.hibernate.annotations.ColumnTransformer;
@@ -51,13 +52,13 @@ public class Diary {
 	private float[] embedding;
 
 	@Column(nullable = false, updatable = false)
-	private LocalDateTime createdAt = LocalDateTime.now();
+	private LocalDateTime createdAt;
 
 	@Builder
-	public Diary(User user, String content, float[] embedding) {
+	public Diary(User user, String content, LocalDate localDate, float[] embedding) {
 		this.user = user;
 		this.content = content;
 		this.embedding = embedding;
-		this.createdAt = LocalDateTime.now();
+		this.createdAt = (localDate != null) ? localDate.atStartOfDay() : LocalDateTime.now();
 	}
 }
