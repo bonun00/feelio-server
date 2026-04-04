@@ -2,12 +2,9 @@ package app.feelio.domain.cheer;
 
 import java.time.LocalDateTime;
 
-import app.feelio.domain.analysis.Emotion;
 import app.feelio.domain.user.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -31,18 +28,19 @@ public class CheerMessage {
 	private User user;
 
 	@Column(nullable = false)
-	@Enumerated(EnumType.STRING)
-	private Emotion emotion;
+	private String emotion;
 
 	@Column(columnDefinition = "TEXT", nullable = false)
 	private String content;
+
+
 
 	@Column(name = "created_at")
 	private LocalDateTime createdAt = LocalDateTime.now();
 
 
 	@Builder
-	public CheerMessage(User user, String content ,Emotion emotion) {
+	public CheerMessage(User user, String content ,String emotion) {
 		this.user = user;
 		this.content = content;
 		this.emotion = emotion;
