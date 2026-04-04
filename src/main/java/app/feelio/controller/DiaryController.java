@@ -42,12 +42,12 @@ public class DiaryController {
 	@GetMapping("/{date}")
 	@Operation(summary = "특정 날짜 일기 상세 조회",
 		description = "해당 날짜에 작성된 일기 본문과 AI 분석 결과(감정, 점수, 코멘트) 리스트를 조회합니다.")
-	public ResponseEntity<List<DiaryDetailRes>> getDiary(
+	public ResponseEntity<DiaryDetailRes> getDiary(
 		@Parameter(description = "조회할 날짜 (예: 2026-04-04)", example = "2026-04-04")
 		@PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
 		@RequestHeader("userId") Long userId
 	) {
-		List<DiaryDetailRes> res = diaryService.getDiaryByDate(userId, date);
+		DiaryDetailRes res = diaryService.getDiaryByDate(userId, date);
 		return ResponseEntity.ok(res);
 	}
 

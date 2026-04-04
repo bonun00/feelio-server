@@ -12,6 +12,8 @@ public record CalendarRes(
 	@Schema(description = "조회된 월", example = "4")
 	int month,
 
+	boolean hasDiary,
+
 	@Schema(description = "해당 월의 1일부터 말일까지의 상세 정보 리스트")
 	List<DayDetail> days
 ) {
